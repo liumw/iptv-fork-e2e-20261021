@@ -11,8 +11,8 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "iptv-fork-e2e-db-20261021",
-      "database_id": "40dae18d-885f-4263-8b2c-1f2fb90c564a",
+      "database_name": "iptv-auto-admin-db-20261021",
+      "database_id": "2a1d5887-a2a8-4a93-983d-f1422ddb93da",
       "migrations_dir": "migrations",
     },
   ],

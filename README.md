@@ -1,7 +1,5 @@
 # IPTV Source Cloudflare
 
-此副本用于 2026-10-21 的独立 Cloudflare 部署验收；管理员在部署后单独初始化，未导入任何直播源。
-
 [![一键部署到 Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https%3A%2F%2Fgithub.com%2Fliumw%2Fiptv-source-cloudflare)
 
 **[一键部署到 Cloudflare](https://deploy.workers.cloudflare.com/?url=https%3A%2F%2Fgithub.com%2Fliumw%2Fiptv-source-cloudflare)** · [部署与首次管理员初始化](docs/DEPLOY_CLOUDFLARE.md#一键部署到-cloudflare)
@@ -14,7 +12,13 @@
 
 ## 部署到你自己的 Cloudflare
 
-**快捷方式：** 点击上方按钮，登录自己的 Cloudflare 账号，按向导创建仓库副本、Worker 和 D1，并填写自己的随机 `SESSION_SECRET`。部署脚本自动建表；首次管理员仍需按教程生成并导入，不提供公共默认密码。
+**快捷方式：** 点击上方按钮，登录自己的 Cloudflare 账号，按向导创建仓库副本、Worker 和 D1，并填写自己的随机 `SESSION_SECRET`（至少 32 字符，可使用密码管理器生成）。部署会自动建表并创建初始账号，无需安装本机工具、执行命令或手动导入 SQL。
+
+| 后台入口 | 初始用户名 | 初始密码 |
+| --- | --- | --- |
+| `https://你的 Worker 域名/_admin` | `admin` | `admin123` |
+
+**首次登录必须设置至少 12 位的新密码**，之后才能使用后台和管理 API。后续重新部署保留已有账号、密码、设置及订阅 token；只有没有管理员的数据库才会自动初始化。初始频道库为空。
 
 **已有 Fork：** 按[一键部署说明](docs/DEPLOY_CLOUDFLARE.md#一键部署到-cloudflare)将部署链接中的仓库地址换成自己的 Fork；若希望直接连接现有 Fork 并复用手动创建的 D1，使用教程的 [Git 自动构建步骤](docs/DEPLOY_CLOUDFLARE.md#6b-可选连接-fork使用-cloudflare-自动构建)。首页按钮默认以本仓库为模板，不会自动识别 Fork 的所有者。
 
@@ -28,6 +32,8 @@
 
 **完整操作步骤：[Cloudflare 部署教程](docs/DEPLOY_CLOUDFLARE.md)**。包含 D1 控制台建库、管理员 SQL 导入、命令行部署、连接 Fork 自动构建、密钥配置及常见故障排查。
 
+已完成真实云端部署、D1 自动建表、独立管理员初始化和公网登录验证，详见[端到端实测记录](docs/DEPLOY_CLOUDFLARE.md#端到端实测2026-10-21)。
+
 运行要求：Node.js 24、pnpm 11、Git、GitHub 和 Cloudflare 账号。项目代码以 MIT 协议开放；第三方播放器的许可证见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
 
 ## 功能
@@ -35,6 +41,8 @@
 - URL、上传文件、粘贴文本导入 M3U / TXT；支持 UTF-8 和 GB18030。
 - 频道归一、待确认审核、频道合并、别名、默认线路、优先级和手工排除。
 - 大号数字台号、线路台标、搜索和适配手机的后台播放器。
+- 手动创建频道，可同时填写播放地址，也可先建空频道再添加线路，无需导入源。
+- 单个或批量物理删除频道，同时清理其线路、别名和内容视图关联；订阅缓存立即失效。
 - 内容视图、指定频道、分组规则及订阅 token。
 - 默认自动识别访问者：Cloudflare 原生 IP / ASN / 地区；按实际访问协议保守筛选。
 - 可选固定网络环境、网段绑定；订阅默认不允许参数覆盖识别结果。
@@ -65,7 +73,7 @@ pnpm dev
 | `private/bootstrap.credentials.txt` | 查看独立初始账号和密码 |
 | `.dev.vars` | 随机 `SESSION_SECRET`；本地开发和本机部署读取 |
 
-没有所有人共用的默认密码。初始化脚本会拒绝覆盖已有初始化文件，SQL 也不会覆盖已有管理员；后续升级不要重复运行初始化。
+以上本地/手动初始化方式使用独立随机密码，和一键部署的 `admin / admin123` 不同。初始化脚本会拒绝覆盖已有初始化文件，SQL 也不会覆盖已有管理员；后续升级不要重复手动导入初始化 SQL。
 
 ## 常用命令
 
@@ -74,7 +82,7 @@ pnpm check          # 构建和 TypeScript 检查
 pnpm test           # 包含空库初始化、首次登录及部署流程测试
 pnpm format:check
 pnpm deploy:check   # 只检查部署打包，不上传
-pnpm run deploy         # 本机上传 .dev.vars；Workers Builds 使用平台 Secret 并先应用 D1 迁移
+pnpm run deploy     # 本机上传 .dev.vars；Workers Builds 自动建表、初始化空库，再发布
 ```
 
 ## 网络识别与运行范围
