@@ -1,5 +1,7 @@
 # IPTV Source Cloudflare
 
+此副本用于 2026-10-21 的独立 Cloudflare 部署验收；管理员在部署后单独初始化，未导入任何直播源。
+
 [![一键部署到 Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https%3A%2F%2Fgithub.com%2Fliumw%2Fiptv-source-cloudflare)
 
 **[一键部署到 Cloudflare](https://deploy.workers.cloudflare.com/?url=https%3A%2F%2Fgithub.com%2Fliumw%2Fiptv-source-cloudflare)** · [部署与首次管理员初始化](docs/DEPLOY_CLOUDFLARE.md#一键部署到-cloudflare)
