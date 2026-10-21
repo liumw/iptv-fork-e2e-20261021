@@ -1,0 +1,25 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "iptv-fork-e2e-20261021",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-20",
+  "assets": {
+    "directory": "./.generated/public",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "iptv-fork-e2e-db-20261021",
+      "database_id": "40dae18d-885f-4263-8b2c-1f2fb90c564a",
+      "migrations_dir": "migrations",
+    },
+  ],
+  "vars": {
+    "APP_NAME": "IPTV Source Manager",
+    "ENABLE_PLAY_PROXY": "false",
+  },
+  "triggers": { "crons": ["17 19 * * *"] },
+  "observability": { "enabled": true },
+}
